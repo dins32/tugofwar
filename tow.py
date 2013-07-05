@@ -107,9 +107,9 @@ class StdOutListener(StreamListener):
 					#print "No match in string, curious."
 					pass
 				else:
-					towval += 1
+					towval -= 1
 			else:
-				towval -= 1
+				towval += 1
 
 		except KeyError:
 			#print "KeyError, skipping..."
@@ -160,7 +160,7 @@ def tow_render():
 	hol.render()			# And render to the Holiday
 
 	# Finally, if we need to exit, do it here.
-	if (towval < 0) or (towval == hol.NUM_GLOBES):
+	if (towval < 0) or (towval >= hol.NUM_GLOBES):
 		finished = True
 		sys.exit(0)			# And we're done
 
@@ -168,6 +168,12 @@ def tow_render():
 
 if __name__ == '__main__':
 	"""The two strings passed after command invocation are the two search terms for the tug-of-war"""
+
+	if len(sys.argv) > 3:
+		the_hostname = sys.argv[3]
+		print the_hostname
+	else:
+		the_hostname = 'localhost:8080'
 
 	hashterm = []
 	if len(sys.argv) > 2:
@@ -180,7 +186,7 @@ if __name__ == '__main__':
 		print "Using default: %s" % hashterm
 
 	# Initialize the tug-of-war
-	hol = holiday.Holiday(remote=True,addr='localhost:8080')
+	hol = holiday.Holiday(remote=True,addr=the_hostname)
 	towval = hol.NUM_GLOBES / 2
 	tow_render()
 		
